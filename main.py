@@ -5,7 +5,10 @@ root = tk.Tk()
 root.title("Login")
 root.geometry("400x400")
 
+
 def dashboard():
+    #this function is called when user logs in
+    #creating window for the main dashboard
     global dash
     dash = tk.Tk()
     dash.title("Dashboard")
@@ -47,10 +50,7 @@ def dashboard():
     edit_btn = tk.Button(dash, text="Muokkaa tehtävää", command=edit)
     edit_btn.grid(row=7, column=0, columnspan=2, pady=10, padx=10)
 
-
-
-
-
+#query function
 def query():
     conn = sqlite3.connect("tasklist.db")
     c = conn.cursor()
@@ -75,6 +75,7 @@ def query():
     conn.commit()
     conn.close()
 
+#submit task function
 def submit():
     conn = sqlite3.connect("tasklist.db")
 
@@ -88,7 +89,8 @@ def submit():
     conn.commit()
     conn.close()
     dashboard.task.delete(0, tk.END)
-
+    
+#delete task function
 def delete():
     conn = sqlite3.connect("tasklist.db")
     c = conn.cursor()
@@ -97,7 +99,7 @@ def delete():
     conn.commit()
     conn.close()
 
-
+#update tasks function
 def update():
     conn = sqlite3.connect("tasklist.db")
     c = conn.cursor()
@@ -116,8 +118,9 @@ def update():
     conn.close()
     editor.destroy()
     query()
-
+#edit task function
 def edit():
+    #creating editor window
     global editor
     editor = tk.Tk()
     editor.title("Päivitä")
@@ -146,10 +149,12 @@ def edit():
     save_btn.grid(row=2, column=0, columnspan=2, pady=10, padx=10)
 
     
-
+#login function
 def login():
+    #getting the user inputs
     login.user = username.get()
     login.password = password.get()
+    #this checks that both password and username is correct
     if login.user == "admin":
         user = 1
     else:
@@ -159,7 +164,7 @@ def login():
         pword = 1
     else:
         pword = 0
-
+    #this tells the user if username or password or both are wrong
     if user == 1 and pword == 1:
         dashboard()
         root.destroy()
@@ -172,7 +177,7 @@ def login():
 
 
 
-
+#root window layout
 username_label = tk.Label(root, text="Käyttäjänimi")
 username_label.grid(row=0, column=1, pady=(10,0))
 
