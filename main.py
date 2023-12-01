@@ -3,8 +3,10 @@ import sqlite3
 
 root = tk.Tk()
 root.title("Login")
-root.geometry("225x190")
+root.geometry("165x190")
 root.resizable(width=False, height=False)
+root.dashHeight = "325"
+
 
 def dashboard():
     #this function is called when user logs in
@@ -12,7 +14,8 @@ def dashboard():
     global dash
     dash = tk.Tk()
     dash.title("Dashboard")
-    dash.geometry("290x400")
+    dash.geometry("290x"+root.dashHeight)
+    dash.resizable(width=False, height=False)
 
     conn = sqlite3.connect("tasklist.db")
     c = conn.cursor()
@@ -25,7 +28,7 @@ def dashboard():
     c.execute(sql)
     conn.commit()
     conn.close()
-
+    #layout
     task_label = tk.Label(dash, text="Tehtävä")
     task_label.grid(row=0, column=0, pady=(10,0))
 
@@ -75,6 +78,16 @@ def query():
 
     conn.commit()
     conn.close()
+    
+    #changes window height when task is added or deleted
+def updateWindowHeight(increase):
+    root.dashHeight = int(root.dashHeight)
+    if increase == True:
+        root.dashHeight += 15
+    else:
+        root.dashHeight -= 15
+    root.dashHeight = str(root.dashHeight)
+    dash.geometry("290x"+root.dashHeight)
 
 #submit task function
 def submit():
@@ -89,6 +102,7 @@ def submit():
     
     conn.commit()
     conn.close()
+    updateWindowHeight(True)
     dashboard.task.delete(0, tk.END)
     
 #delete task function
@@ -99,6 +113,7 @@ def delete():
     dashboard.delete_box.delete(0, tk.END)
     conn.commit()
     conn.close()
+    updateWindowHeight(False)
 
 #update tasks function
 def update():
@@ -182,13 +197,13 @@ def login():
 username_label = tk.Label(root, text="Käyttäjänimi")
 username_label.grid(row=0, column=1, pady=(10,0))
 
-username = tk.Entry(root, width=30)
+username = tk.Entry(root, width=20)
 username.grid(row=1, column=1, padx=20, pady=(10,0))
 
 password_label = tk.Label(root, text="Salasana")
 password_label.grid(row=2, column=1, pady=(10,0))
 
-password = tk.Entry(root, width=30, show="*")
+password = tk.Entry(root, width=20, show="*")
 password.grid(row=3, column=1, padx=20, pady=(10,0))
 
 login_btn = tk.Button(root, text="Kirjaudu", command=login)
