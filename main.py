@@ -7,7 +7,6 @@ root.geometry("165x190")
 root.resizable(width=False, height=False)
 root.dashHeight = "325"
 
-
 def dashboard():
     #this function is called when user logs in
     #creating window for the main dashboard
@@ -28,6 +27,7 @@ def dashboard():
     c.execute(sql)
     conn.commit()
     conn.close()
+    
     #layout
     task_label = tk.Label(dash, text="Tehtävä")
     task_label.grid(row=0, column=0, pady=(10,0))
@@ -52,6 +52,7 @@ def dashboard():
 
     edit_btn = tk.Button(dash, text="Muokkaa tehtävää", width=25, command=edit)
     edit_btn.grid(row=7, column=1, columnspan=2, pady=10, padx=20)
+
 
 #query function
 def query():
@@ -79,31 +80,33 @@ def query():
     conn.commit()
     conn.close()
     
+    
     #changes window height when task is added or deleted
 def updateWindowHeight(increase):
-    root.dashHeight = int(root.dashHeight)
     if increase == True:
-        root.dashHeight += 15
+        root.dashHeight = int(root.dashHeight) + 15
     else:
-        root.dashHeight -= 15
-    root.dashHeight = str(root.dashHeight)
-    dash.geometry("290x"+root.dashHeight)
-
+        root.dashHeight = int(root.dashHeight) - 15
+    dash.geometry("290x"+str(root.dashHeight))
+    
+    
 #submit task function
 def submit():
     conn = sqlite3.connect("tasklist.db")
-
     c = conn.cursor()
-
-    c.execute("INSERT INTO tasks VALUES (:task)",
-        {
-            'task' : dashboard.task.get()
-        })
     
+    #check if entry is empty
+    if dashboard.task.get() != "":
+        c.execute("INSERT INTO tasks VALUES (:task)",
+            {
+                'task' : dashboard.task.get()
+            })
+        updateWindowHeight(True)
+        
     conn.commit()
     conn.close()
-    updateWindowHeight(True)
     dashboard.task.delete(0, tk.END)
+    
     
 #delete task function
 def delete():
@@ -114,6 +117,7 @@ def delete():
     conn.commit()
     conn.close()
     updateWindowHeight(False)
+
 
 #update tasks function
 def update():
@@ -134,6 +138,7 @@ def update():
     conn.close()
     editor.destroy()
     query()
+    
     
 #edit task function
 def edit():
@@ -164,6 +169,7 @@ def edit():
 
     save_btn = tk.Button(editor, text="Tallenna", command=update)
     save_btn.grid(row=2, column=0, columnspan=2, pady=10, padx=10)
+   
     
 #login function
 def login():
@@ -183,6 +189,7 @@ def login():
     #this tells the user if username or password or both are wrong
     if user == 1 and pword == 1:
         dashboard()
+        query()
         root.destroy()
     elif user == 0 and pword == 1:
         error_label.config(text="Käyttäjänimi on virheellinen")
@@ -190,7 +197,6 @@ def login():
         error_label.config(text="Salasana on virheellinen")
     else:
         error_label.config(text="Käyttäjänimi ja salasana ovat virheellisiä")
-
 
 
 #root window layout
