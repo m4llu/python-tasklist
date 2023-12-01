@@ -3,8 +3,8 @@ import sqlite3
 
 root = tk.Tk()
 root.title("Login")
-root.geometry("400x400")
-
+root.geometry("225x190")
+root.resizable(width=False, height=False)
 
 def dashboard():
     #this function is called when user logs in
@@ -12,7 +12,7 @@ def dashboard():
     global dash
     dash = tk.Tk()
     dash.title("Dashboard")
-    dash.geometry("400x400")
+    dash.geometry("290x400")
 
     conn = sqlite3.connect("tasklist.db")
     c = conn.cursor()
@@ -32,23 +32,23 @@ def dashboard():
     dashboard.task = tk.Entry(dash, width=30)
     dashboard.task.grid(row=0, column=1, padx=20, pady=(10,0))
 
-    submit_btn = tk.Button(dash, text="Lisää tehtävä tietokantaan", command=lambda:[submit(), query()])
-    submit_btn.grid(row=2, column=0, columnspan=2, pady=10, padx=10)
+    submit_btn = tk.Button(dash, text="Lisää tehtävä tietokantaan", width=25, command=lambda:[submit(), query()])
+    submit_btn.grid(row=2, column=1, columnspan=2, pady=10, padx=20)
 
-    query_btn = tk.Button(dash, text="Näytä tehtävät", command=query)
-    query_btn.grid(row=3, column=0, columnspan=2, pady=10, padx=10)
+    query_btn = tk.Button(dash, text="Näytä tehtävät", width=25, command=query)
+    query_btn.grid(row=3, column=1, columnspan=2, pady=10, padx=20)
 
     select_label = tk.Label(dash, text="Valitse ID")
     select_label.grid(row=4, column=0, pady=5)
 
-    dashboard.delete_box = tk.Entry(dash, width=30)
+    dashboard.delete_box = tk.Entry(dash, width=30)   
     dashboard.delete_box.grid(row=5, column=1, pady=5)
 
-    delete_btn = tk.Button(dash, text="Poista tehtävä", command=lambda:[delete(), query()])
-    delete_btn.grid(row=6, column=0, columnspan=2, pady=10, padx=10)
+    delete_btn = tk.Button(dash, text="Poista tehtävä", width=25, command=lambda:[delete(), query()])
+    delete_btn.grid(row=6, column=1, columnspan=2, pady=10, padx=20)
 
-    edit_btn = tk.Button(dash, text="Muokkaa tehtävää", command=edit)
-    edit_btn.grid(row=7, column=0, columnspan=2, pady=10, padx=10)
+    edit_btn = tk.Button(dash, text="Muokkaa tehtävää", width=25, command=edit)
+    edit_btn.grid(row=7, column=1, columnspan=2, pady=10, padx=20)
 
 #query function
 def query():
@@ -65,7 +65,8 @@ def query():
     heading_label['text'] = "Tehtävä \t ID"
     heading_label.grid(row=8, column=0, columnspan=2)
 
-    # Update the existing label with the updated task list
+    # create query_label if it doesn't exist
+    # update if exists
     if hasattr(dash, 'query_label'):
         dash.query_label['text'] = print_records
     else:
@@ -118,6 +119,7 @@ def update():
     conn.close()
     editor.destroy()
     query()
+    
 #edit task function
 def edit():
     #creating editor window
@@ -147,7 +149,6 @@ def edit():
 
     save_btn = tk.Button(editor, text="Tallenna", command=update)
     save_btn.grid(row=2, column=0, columnspan=2, pady=10, padx=10)
-
     
 #login function
 def login():
