@@ -3,7 +3,7 @@ import sqlite3
 
 root = tk.Tk()
 root.title("Login")
-root.geometry("165x190")
+root.geometry("165x200")
 root.resizable(width=False, height=False)
 root.dashHeight = "325"
 
@@ -177,27 +177,12 @@ def login():
     login.user = username.get()
     login.password = password.get()
     #this checks that both password and username is correct
-    if login.user == "admin":
-        user = 1
-    else:
-        user = 0
-
-    if login.password == "admin":
-        pword = 1
-    else:
-        pword = 0
-    #this tells the user if username or password or both are wrong
-    if user == 1 and pword == 1:
+    if login.user == "admin" and login.password == "admin":
         dashboard()
         query()
         root.destroy()
-    elif user == 0 and pword == 1:
-        error_label.config(text="Käyttäjänimi on virheellinen")
-    elif user == 1 and pword == 0:
-        error_label.config(text="Salasana on virheellinen")
     else:
-        error_label.config(text="Käyttäjänimi ja salasana ovat virheellisiä")
-
+        error_label.config(text="Virhe")
 
 #root window layout
 username_label = tk.Label(root, text="Käyttäjänimi")
