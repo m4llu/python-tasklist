@@ -176,7 +176,7 @@ def login():
     #getting the user inputs
     login.user = username.get()
     login.password = password.get()
-    #this checks that both password and username is correct
+    #this checks that password and username is correct
     if login.user == "admin" and login.password == "admin":
         dashboard()
         query()
